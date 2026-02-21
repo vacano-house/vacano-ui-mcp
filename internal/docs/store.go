@@ -9,6 +9,7 @@ import (
 type Store struct {
 	mu      sync.RWMutex
 	entries []DocEntry
+	icons   []IconEntry
 }
 
 func NewStore() *Store {
@@ -20,6 +21,13 @@ func (s *Store) Reload(entries []DocEntry) {
 	defer s.mu.Unlock()
 
 	s.entries = entries
+}
+
+func (s *Store) ReloadIcons(icons []IconEntry) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	s.icons = icons
 }
 
 func (s *Store) Search(query string) []DocEntry {
@@ -80,6 +88,24 @@ func (s *Store) List(category string) []DocEntrySummary {
 		}
 		return results[i].Name < results[j].Name
 	})
+
+	return results
+}
+
+func (s *Store) SearchIcons(query string) []IconEntry {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+
+	q := strings.ToLower(query)
+	var results []IconEntry
+
+	for _, icon := range s.icons {
+		if strings.Contains(strings.ToLower(icon.Name), q) ||
+			strings.Contains(strings.ToLower(icon.Description), q) ||
+			strings.Contains(strings.ToLower(icon.Category), q) {
+			results = append(results, icon)
+		}
+	}
 
 	return results
 }

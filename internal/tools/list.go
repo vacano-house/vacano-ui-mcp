@@ -10,7 +10,7 @@ import (
 )
 
 type ListParams struct {
-	Category string `json:"category,omitempty" jsonschema:"Optional filter by category: form, data-display, feedback, layout, navigation, utility, guide"`
+	Category string `json:"category,omitempty" jsonschema:"Optional filter by category: form, data-display, feedback, layout, navigation, utility, overview, guide"`
 }
 
 func NewListHandler(store *docs.Store) func(context.Context, *mcp.CallToolRequest, *ListParams) (*mcp.CallToolResult, any, error) {

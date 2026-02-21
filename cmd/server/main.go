@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
@@ -72,8 +73,13 @@ func main() {
 
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "list_components",
-		Description: "List all available vacano-ui components. Optionally filter by category: form, data-display, feedback, layout, navigation, utility, guide.",
+		Description: "List all available vacano-ui components. Optionally filter by category: form, data-display, feedback, layout, navigation, utility, overview, guide.",
 	}, tools.NewListHandler(store))
+
+	mcp.AddTool(server, &mcp.Tool{
+		Name:        "search_icons",
+		Description: "Search vacano-ui icons (1,894 Lucide icons) by name, description, or category. Icons are imported from '@vacano/ui/icons'. Use this to find the right icon for a UI element.",
+	}, tools.NewSearchIconsHandler(store))
 
 	// Streamable HTTP handler
 	handler := mcp.NewStreamableHTTPHandler(func(request *http.Request) *mcp.Server {
@@ -129,6 +135,16 @@ func refreshDocs(repository *repo.Repo, store *docs.Store) error {
 
 	entries := docs.Parse(files, categoryMap)
 	store.Reload(entries)
+
+	// Parse icons from icons.md
+	for path, content := range files {
+		if strings.HasSuffix(path, "components/icons.md") {
+			icons := docs.ParseIcons(content)
+			store.ReloadIcons(icons)
+			log.Printf("Loaded %d icons", len(icons))
+			break
+		}
+	}
 
 	log.Printf("Loaded %d documentation entries", len(entries))
 	return nil

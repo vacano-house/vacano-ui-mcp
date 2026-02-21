@@ -10,6 +10,7 @@ const (
 	CategoryNavigation  Category = "navigation"
 	CategoryUtility     Category = "utility"
 	CategoryGuide       Category = "guide"
+	CategoryOverview    Category = "overview"
 )
 
 type DocEntry struct {
@@ -23,4 +24,10 @@ type DocEntrySummary struct {
 	Name        string   `json:"name"`
 	Category    Category `json:"category"`
 	Description string   `json:"description"`
+}
+
+type IconEntry struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Category    string `json:"category"`
 }
