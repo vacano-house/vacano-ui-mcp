@@ -1,6 +1,6 @@
 # vacano-ui-mcp
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![Version](https://img.shields.io/badge/version-1.0.1-blue)
 
 MCP server providing documentation for [vacano-ui](https://github.com/vacano-house/vacano-ui) React component library.
 
