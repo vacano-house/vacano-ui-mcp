@@ -137,6 +137,8 @@ func normalizeCategoryName(name string) Category {
 		return CategoryNavigation
 	case "utility":
 		return CategoryUtility
+	case "overview":
+		return CategoryOverview
 	default:
 		return CategoryUtility
 	}
