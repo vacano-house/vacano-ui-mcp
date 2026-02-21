@@ -40,6 +40,10 @@ func parseFile(path, content string, categoryMap CategoryMap) *DocEntry {
 		return parseComponent(path, content, categoryMap)
 	}
 
+	if strings.Contains(dir, "lib") {
+		return parseLib(path, content, categoryMap)
+	}
+
 	return nil
 }
 
@@ -52,6 +56,27 @@ func parseComponent(path, content string, categoryMap CategoryMap) *DocEntry {
 	}
 
 	category := CategoryUtility
+	if cat, ok := categoryMap[slug]; ok {
+		category = cat
+	}
+
+	return &DocEntry{
+		Name:        name,
+		Category:    category,
+		Description: extractDescription(content),
+		Content:     strings.TrimSpace(content),
+	}
+}
+
+func parseLib(path, content string, categoryMap CategoryMap) *DocEntry {
+	slug := strings.TrimSuffix(filepath.Base(path), ".md")
+
+	name := extractH1(content)
+	if name == "" {
+		name = slugToName(slug)
+	}
+
+	category := CategoryLib
 	if cat, ok := categoryMap[slug]; ok {
 		category = cat
 	}

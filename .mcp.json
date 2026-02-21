@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "vacano-ui": {
+      "type": "http",
+      "url": "https://tools.vacano.io/ui/mcp"
+    }
+  }
+}

@@ -8,7 +8,7 @@ import (
 type CategoryMap map[string]Category
 
 var sectionRegex = regexp.MustCompile(`text:\s*'([^']+)'`)
-var linkRegex = regexp.MustCompile(`link:\s*'(/components/[^']+)'`)
+var linkRegex = regexp.MustCompile(`link:\s*'(/(components|lib)/[^']+)'`)
 
 func ParseCategories(configContent string) CategoryMap {
 	cm := make(CategoryMap)
@@ -37,8 +37,18 @@ func ParseCategories(configContent string) CategoryMap {
 }
 
 func splitSidebarSections(content string) []string {
-	// Find the '/components/' sidebar key (with colon to avoid matching nav links)
-	start := strings.Index(content, "'/components/':")
+	var allSections []string
+
+	for _, key := range []string{"'/components/':", "'/lib/':"} {
+		sections := extractSectionsForKey(content, key)
+		allSections = append(allSections, sections...)
+	}
+
+	return allSections
+}
+
+func extractSectionsForKey(content, key string) []string {
+	start := strings.Index(content, key)
 	if start == -1 {
 		return nil
 	}
@@ -110,8 +120,10 @@ func extractComponentSlugs(section string) []string {
 		if len(match) < 2 {
 			continue
 		}
-		// Extract slug from "/components/slug"
-		slug := strings.TrimPrefix(match[1], "/components/")
+		// Extract slug from "/components/slug" or "/lib/slug"
+		slug := match[1]
+		slug = strings.TrimPrefix(slug, "/components/")
+		slug = strings.TrimPrefix(slug, "/lib/")
 		if slug != "" {
 			slugs = append(slugs, slug)
 		}
@@ -139,6 +151,8 @@ func normalizeCategoryName(name string) Category {
 		return CategoryUtility
 	case "overview":
 		return CategoryOverview
+	case "lib", "utils", "utilities", "hooks", "types", "constants":
+		return CategoryLib
 	default:
 		return CategoryUtility
 	}

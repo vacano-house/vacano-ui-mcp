@@ -73,7 +73,7 @@ func main() {
 
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "list_components",
-		Description: "List all available vacano-ui components. Optionally filter by category: form, data-display, feedback, layout, navigation, utility, overview, guide.",
+		Description: "List all available vacano-ui components. Optionally filter by category: form, data-display, feedback, layout, navigation, utility, lib, overview, guide.",
 	}, tools.NewListHandler(store))
 
 	mcp.AddTool(server, &mcp.Tool{

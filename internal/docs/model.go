@@ -9,6 +9,7 @@ const (
 	CategoryLayout      Category = "layout"
 	CategoryNavigation  Category = "navigation"
 	CategoryUtility     Category = "utility"
+	CategoryLib         Category = "lib"
 	CategoryGuide       Category = "guide"
 	CategoryOverview    Category = "overview"
 )
