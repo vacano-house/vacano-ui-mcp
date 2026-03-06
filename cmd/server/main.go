@@ -87,7 +87,7 @@ func main() {
 	}, nil)
 
 	mux := http.NewServeMux()
-	mux.Handle("/mcp", handler)
+	mux.Handle("/ui", handler)
 
 	// HTTP server
 	srv := &http.Server{
